@@ -1,93 +1,20 @@
 <html>
 <head>
 	<link rel="stylesheet" type="text/css" href="style.css" />
+	<script src="jquery-1.10.2.min.js"></script>
+	<script src="script.js"></script>
 </head>
 <body>
 	<div id="header">
 		<div class="wrap">
 			<div class="controls">
-				<div class="wrap_buttonAdd">
-					<button class="blue">Добавить</button>
-					<div class="popup_createNew">
-						<div class="daw"></div>
-						<div class="cross"></div>
-						<input type="text" placeholder="5 марта, 14:00, День рождение">
-						<button>Создать</button>
-					</div>
+				<div class="wrap_buttonAdd" id="wrap_buttonAdd">
+					<button class="blue" id="add_button">Добавить</button>
+					
 				</div>
 				<button class="blue">Обновить</button>
-				<div class="search"><input  type="text" placeholder="Событие, дата или участник">
-					<div class="popup_search">
-						<div class="daw"></div>
-						<div class="finded_elements">
-							<div class="element">
-								<a class="inner">
-									<div class="name">Митинг на болотной</div>
-									<div class="date">6 августа</div>
-								</a>
-							</div>
-							<div class="element">
-								<a class="inner">
-									<div class="name">Митинг на болотной</div>
-									<div class="date">6 августа</div>
-								</a>
-							</div>
-							<div class="element">
-								<a class="inner">
-									<div class="name">Митинг на болотной</div>
-									<div class="date">6 августа</div>
-								</a>
-							</div>
-							<div class="element">
-								<a class="inner">
-									<div class="name">Митинг на болотной</div>
-									<div class="date">6 августа</div>
-								</a>
-							</div>
-							<div class="element">
-								<a class="inner">
-									<div class="name">Митинг на болотной</div>
-									<div class="date">6 августа</div>
-								</a>
-							</div>
-							<div class="element">
-								<a class="inner">
-									<div class="name">Митинг на болотной</div>
-									<div class="date">6 августа</div>
-								</a>
-							</div>
-							<div class="element">
-								<a class="inner">
-									<div class="name">Митинг на болотной</div>
-									<div class="date">6 августа</div>
-								</a>
-							</div>
-							<div class="element">
-								<a class="inner">
-									<div class="name">Митинг на болотной</div>
-									<div class="date">6 августа</div>
-								</a>
-							</div>
-							<div class="element">
-								<a class="inner">
-									<div class="name">Митинг на болотной</div>
-									<div class="date">6 августа</div>
-								</a>
-							</div>
-							<div class="element">
-								<a class="inner">
-									<div class="name">Митинг на болотной</div>
-									<div class="date">6 августа</div>
-								</a>
-							</div>
-							<div class="element">
-								<a class="inner">
-									<div class="name">Митинг на болотной</div>
-									<div class="date">6 августа</div>
-								</a>
-							</div>
-						</div>
-					</div>
+				<div class="search" id="search"><input id="input_search"  type="text" placeholder="Событие, дата или участник">
+					
 				</div>
 			</div>
 		</div>
@@ -100,7 +27,7 @@
 				<button class="right"></button>
 				<button>сегодня</button>
 			</div>
-			<table class="calendar">
+			<table class="calendar" id="calendar">
 				<tbody>
 					<tr>
 						<td><a class="IE_hover"><div class="inner">Понедельник, 25</div></a></td>
@@ -124,18 +51,11 @@
 						<td><a class="IE_hover"><div class="inner">11</div></a></td>
 						<td><a class="IE_hover"><div class="inner">12</div></a></td>
 						<td><a class="IE_hover"><div class="inner">13</div></a></td>
-						<td><a class="IE_hover">
-							<div class="popup_editDay">
-								<div class="daw"></div>
-								<div class="cross"></div>
-								<input type="text" placeholder="Сооытие">
-								<input type="text" placeholder="День, месяц, год">
-								<input type="text" placeholder="Имена участников">
-								<textarea placeholder="Описание"></textarea>
-								<button>Создать</button><button>Удалить</button>
-							</div>
-							<div class="inner">14</div>
-						</a></td>
+						<td>
+							
+						<a class="IE_hover"><div class="inner">14</div></a></td>
+							
+						
 						<td><a class="IE_hover"><div class="inner">15</div></a></td>
 						<td><a class="IE_hover"><div class="inner">16</div></a></td>
 						<td><a class="IE_hover"><div class="inner">17</div></a></td>

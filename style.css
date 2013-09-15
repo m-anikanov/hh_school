@@ -104,7 +104,7 @@ cursor: pointer;
 }
 
 
-.controls button:active {
+.controls button:active, .controls button.active{
 
 	box-shadow: inset 0px 0px 4px rgba(0,0,0,0.6);
 
@@ -169,7 +169,9 @@ left: 1px;
 top: 42px;
 box-shadow: 0 1px 10px rgba(0,0,0,0.4);
 padding: 24px 21px;
+display: none;
 }
+
 
 .popup_createNew .daw{
 	background-image: url('daw-top.png');
@@ -230,12 +232,14 @@ padding: 10px 7px;
 clear: both; display: inline-block;
 }
 
-td a.IE_hover:hover .inner, td:active .inner{
+td a.IE_hover:hover .inner, td:active .inner, td .inner.active{
 	cursor:pointer;
 	border:#86c9fd 2px solid;
 	padding:8px 9px 12px 5px;
 	}
-
+td .inner.active{
+	background-color: #e5f1f9;
+}
 
 .popup_editDay{
 	position: absolute;
@@ -314,6 +318,7 @@ top: 42px;
 box-shadow: 0 1px 10px rgba(0,0,0,0.4);
 margin-left: 24px;
 max-height: 500px; 	
+display:none;
 	
 }
 
@@ -397,3 +402,4 @@ font-size: 13px;
 font-size: 13px;
 color: #666;
 }
+
