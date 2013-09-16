@@ -3,6 +3,14 @@
 	selected_day = new Object();
 	selected_year = today.getFullYear();
 	selected_month = today.getMonth()+1;
+	days[2013]=Array();
+	days[2013][09]=Array();
+	days[2013][09][17]=Object();
+	days[2013][09][17].exist=1;
+	days[2013][09][17].event_title="Напиться!";
+	days[2013][09][17].participants="Витя Костин, Петр Михайлов!";
+	days[2013][09][17].descript="23:00";
+
 
 
 
@@ -18,6 +26,8 @@ $(document).ready(function(){
 
 //Вызов этого окна
 	$('#add_button').click(function(){popup_createNew_init(); popup_controller($('#popup_createNew'),$('#add_button')); });
+	$('#edit_button').click(function(){draw_popup_editDay(selected_day.element);});
+
 	$('.cross').click(function(){popup_controller($('#popup_createNew'),$('#add_button'))});
 
 
@@ -36,10 +46,7 @@ $(document).ready(function(){
 
 	$('#nav button.today').click(function(){go_today()});
 
-
-//!!!!!!!!!!!!!!!!костыль
-$('#calendar .inner').prop("day",6);
-$('#calendar .inner').prop("month",12);
+ 	
 
 
 go_today();
@@ -69,7 +76,7 @@ function popup_controller(popup_object,button_object){
 
 function popup_createNew_init()
 {
-	$('#popup_createNew input').attr('placeholder', selected_day.day+' '+month_name(2,selected_day.month)+', 14:00, День рождение');
+	$('#popup_createNew input').attr('placeholder', selected_day.day+' '+month_name(2,selected_month)+', 14:00, День рождение');
 }
 
 
@@ -202,44 +209,97 @@ function day_name(day){
 return result;
 }
 
-function add_event(day,month,year,ar_title,members,discribe){
-	day[day+'.'+month+'.'+year]=Object();
-	day[day+'.'+month+'.'+year].day=day;
-	day[day+'.'+month+'.'+year].month=month;
-	day[day+'.'+month+'.'+year].year=year;
-	day[day+'.'+month+'.'+year].ar_title=ar_title;
-	day[day+'.'+month+'.'+year].members=members;
-	day[day+'.'+month+'.'+year].discribe=discribe;
-	day[day+'.'+month+'.'+year].is=1;
 
+
+
+
+function draw_popup_viewDay(td_element){
+
+
+
+td_element.parent().parent().prepend('<div class="popup_editDay" id="popup_editDay"><div class="daw"></div><div class="cross"></div><div class="title">'+days[selected_year][selected_month][selected_day.day].event_title+'</div><div class="date" >'+selected_day.day+' '+month_name(2,selected_month)+' '+selected_year+'</div><div class="section">Участники:</div><div class="participants">'+days[selected_year][selected_month][selected_day.day].participants+'</div><div class="section">Описание:</div><div class="description">'+days[selected_year][selected_month][selected_day.day].descript+'</div><button id="delete">Удалить</button></div>');
+
+$('#popup_editDay .cross').click(function(){$('#popup_editDay').remove();});
+$('#popup_editDay #delete').click(function(){delete_event(selected_year,selected_month,selected_day.day); go_date(selected_year,selected_month,selected_day.day);});
 }
-
-
 
 function draw_popup_editDay(td_element){
 
 
-
-	$('#popup_editDay').remove();
-
-
-td_element.parent().parent().prepend('<div class="popup_editDay" id="popup_editDay"><div class="daw"></div><div class="cross"></div><input type="text" placeholder="Сооытие"><input type="text" placeholder="День, месяц, год"><input type="text" placeholder="Имена участников"><textarea placeholder="Описание"></textarea><button>Создать</button><button>Удалить</button></div>');
+$('#popup_editDay').remove();
+pave_path(selected_year,selected_month,selected_day.day);
 
 
+var popup_html='<div class="popup_editDay" id="popup_editDay"><div class="daw"></div><div class="cross"></div><input type="text" value="'+days[selected_year][selected_month][selected_day.day].event_title+'" id="title" placeholder="Событие"><input type="text" value="'+selected_day.day+' '+month_name(2,selected_month)+' '+selected_year+'" placeholder="День, месяц, год"><input type="text" value="'+days[selected_year][selected_month][selected_day.day].participants+'" id="participants" placeholder="Имена участников"><textarea placeholder="Описание" id="descript">'+days[selected_year][selected_month][selected_day.day].descript+'</textarea><button id="done">Готово</button>';
+if(days[selected_year][selected_month][selected_day.day].exist==1){popup_html+= '<button id="delete">Удалить</button>';}
+popup_html+='</div>';
+td_element.parent().parent().prepend(popup_html);
 
 $('#popup_editDay .cross').click(function(){$('#popup_editDay').remove();});
+$('#popup_editDay #delete').click(function(){delete_event(selected_year,selected_month,selected_day.day); go_date(selected_year,selected_month,selected_day.day);});
+
+
+$('#popup_editDay #done').click(function(){update_event(selected_year,selected_month,selected_day.day)});
+
 }
 
+
+function pave_path(year,month,date){
+
+
+
+if(days[year]===undefined){days[year]=Array();}
+if(days[year][month]===undefined){days[year][month]=Array();}
+if(!(typeof days[year][month][date]== "object"&&days[year][month][date]!==null)){days[year][month][date]=Object();
+
+
+	days[year][month][date].exist=0;
+	days[year][month][date].event_title="";
+	days[year][month][date].participants="";
+	days[year][month][date].descript="";
+}
+
+}
+
+
+function update_event(year,month,date){
+
+	var title=$('#popup_editDay #title').val();
+	var participants=$('#popup_editDay #participants').val();
+	var descript=$('#popup_editDay #descript').val();
+
+	
+
+	pave_path(year,month,date);
+
+	days[year][month][date].exist=1;
+	if(title!==undefined){days[year][month][date].event_title=title;}
+	if(participants!==undefined){days[year][month][date].participants=participants;}
+	if(descript!==undefined){days[year][month][date].descript=descript;}
+	
+	go_date(year,month,date)
+	
+
+	}
 
 function light_day(element){
 	$('#calendar .inner').removeClass('active');
 	element.addClass('active');
 	
 	selected_day.day=element.attr("date");
-	selected_day.month=selected_month;
 	selected_day.element=element;
 
-	draw_popup_editDay(element);
+
+
+	$('#popup_editDay').remove();
+
+	if(does_event_exist(selected_year,selected_month,selected_day.day)){
+		
+					draw_popup_viewDay(element);
+				
+	}
+	
+	
 
 }
 
@@ -261,7 +321,19 @@ Date.prototype.getDaysInMonth = function()
 Date.prototype.getDaysInMonth.R = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 Date.prototype.getDaysInMonth.L = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
-
+function does_event_exist(year,month,day){
+	var result=0;
+if(days[year]!= undefined){
+		if(days[year][month]!= undefined){
+			if(typeof days[year][month][day] == "object"&&days[year][month][day] !== null){
+				if(days[year][month][day].exist==1){
+					 result=1;
+				}
+			}
+		}
+	}
+return result;
+}
 
 function get_calendarArray(month,year)
 {
@@ -283,6 +355,8 @@ for(var i=day-1;i>=0;i--){
  calendar[i].date_class=" previus";
  pre_day--;
 date--;
+
+
 }
 
 
@@ -294,6 +368,22 @@ for(date=1;date<=select_month.getDaysInMonth();date++){
  calendar[i].date=date;
  calendar[i].day=day;
  calendar[i].date_class=" curent";
+ calendar[i].today=0;
+ calendar[i].has_event=0;
+ if(date==today.getDate()&&month==today.getMonth()+1&&year==today.getFullYear()){ calendar[i].td_class+=" today";}
+
+ if ( does_event_exist(year,month,date)==1){
+ 
+
+ calendar[i].event_title=days[year][month][date].event_title;
+
+calendar[i].participants=days[year][month][date].participants;
+ calendar[i].td_class+=" has_event"; 
+ calendar[i].has_event=1;
+
+
+ }
+
 
  day++;
  if (day>6){day=0;}
@@ -324,9 +414,14 @@ function draw_calendar(month,year){
 	for (var j = 0; j < calendarArray.length/7; j++) {
 		calendarHtml+='<tr>';
 			for (var i = 0; i < 7; i++) {
-			  calendarHtml+='<td><a class="IE_hover"><div date="'+calendarArray[element].date+'" class="inner'+calendarArray[element].date_class+'">';
+			  calendarHtml+='<td class="'+calendarArray[element].td_class+'"';
+			  calendarHtml+='><a class="IE_hover"><div date="'+calendarArray[element].date+'" class="inner'+calendarArray[element].date_class+'"><span class="date_label">';
 			  if(j==0){calendarHtml+=capitaliseFirstLetter(day_name(calendarArray[element].day))+', ';}
-			  calendarHtml+=calendarArray[element].date+'</div></a></td>';
+			  calendarHtml+=calendarArray[element].date+'</span>';
+			  if( calendarArray[element].has_event==1){
+			  	calendarHtml+= '<br><b>'+calendarArray[element].event_title+'</b><br><span class="participants">' + calendarArray[element].participants+'</span>';
+			  }
+			  calendarHtml+='</div></a></td>';
 			  element++;
 			}
 		calendarHtml+='</tr>';
@@ -396,3 +491,26 @@ function go_today(){
 
 	$('#calendar .inner.curent[date="'+today.getDate()+'"]').click();
 }
+
+function go_date(year,month,date){
+	draw_calendar(month,year);
+
+	$('#calendar .inner.curent[date="'+date+'"]').click();
+}
+
+
+
+
+function delete_event(year,monse,day){
+	days[year][monse][day]=null;
+
+}
+
+
+
+
+
+
+
+
+

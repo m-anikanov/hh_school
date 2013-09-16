@@ -225,7 +225,7 @@ display: none;
 td .inner{
 
 height: 96px;
-width: 112px;
+width: 111px;
 margin-left: -1px;
 margin-top: -1px;
 position: absolute;
@@ -243,9 +243,17 @@ td .inner.active{
 	background-color: #e5f1f9;
 }
 
+td.today{
+	background-color: #f4f4f4;
+}
+
+td.today .date_label{
+	font-weight: bold;
+	color:666666;
+}
+
 .popup_editDay{
 	position: absolute;
-	height: 281px;
 	width: 260px;
 	background-color: white;
 	z-index: 20;
@@ -295,10 +303,36 @@ td .inner.active{
 	left: -13px;
 }
 
+.popup_editDay .title{
+	color: black;
+    font-size: 17px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.popup_editDay .date{
+    color: black;
+    margin-bottom: 15px;
+}
 
 
+.popup_editDay .section{
+    color: #666;
+    font-weight: bold;
+    margin-bottom: 4px;
+}
 
 
+.popup_editDay .participants{
+    margin-bottom: 10px;
+    color: black;
+}
+
+
+.popup_editDay .description{
+    color: black;
+    margin-bottom: 15px;
+}
 
 
 
