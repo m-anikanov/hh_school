@@ -57,6 +57,7 @@ body{
 
 .calendar b, .calendar .participants{
 	color:#666;
+	word-break: break-word;
 }
 
 .search{
@@ -230,7 +231,7 @@ margin-left: -1px;
 margin-top: -1px;
 position: absolute;
 padding: 10px 7px;
-
+overflow:hidden;
 clear: both; display: inline-block;
 }
 
@@ -264,6 +265,14 @@ td.today .date_label{
 	margin-left: 140px;
 	margin-top: -20px;
 	
+}
+
+.popup_editDay .error{
+	color: rgb(216, 12, 12);
+	font-size: 14px;
+	margin-bottom: 15px;
+	margin-right: 3px;
+	line-height: 20px;
 }
 
 .popup_editDay input{
@@ -326,12 +335,20 @@ td.today .date_label{
 .popup_editDay .participants{
     margin-bottom: 10px;
     color: black;
+    word-wrap: break-word;
+    max-height: 200px;
+	overflow: auto;
+
 }
 
 
 .popup_editDay .description{
     color: black;
     margin-bottom: 15px;
+    word-wrap: break-word;
+    max-height: 200px;
+	overflow: auto;
+
 }
 
 

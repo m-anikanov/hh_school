@@ -76,12 +76,59 @@ function popup_controller(popup_object,button_object){
 
 function popup_createNew_init()
 {
+
+
+	$('#popup_editDay').remove();
 	$('#popup_createNew input').attr('placeholder', selected_day.day+' '+month_name(2,selected_month)+', 14:00, День рождение');
 }
 
 
 function month_name(mode,month){
 	var result;
+		if (mode==3)
+	{
+		switch (month) {
+			case "января":
+		      result=1;
+			break;
+			case "февраля":
+		      result=2;
+			break;
+			case "марта":
+		      result=3;
+			break;
+			case "апреля":
+		      result=4;
+			break;
+			case "мая":
+		      result=5;
+			break;
+			case "июня":
+		      result=6;
+			break;
+			case "июля":
+		      result=7;
+			break;
+			case "августа":
+		      result=8;
+			break;
+			case "сентября":
+		      result=9;
+			break;
+			case "октября":
+		      result=10;
+			break;
+			case "ноября":
+		      result=11;
+			break;
+			case "декабря":
+		      result=12;
+			break;
+			default:
+		      result="нет";
+		}
+
+	}
 	if (mode==2)
 	{
 		switch (month) {
@@ -210,14 +257,27 @@ return result;
 }
 
 
+function close_all_popups(){
 
-
+		$('#popup_createNew').css( "display", "none" );
+		$('#add_button').removeClass('active');
+		$('#popup_editDay').remove();
+}
 
 function draw_popup_viewDay(td_element){
 
 
+close_all_popups();
 
-td_element.parent().parent().prepend('<div class="popup_editDay" id="popup_editDay"><div class="daw"></div><div class="cross"></div><div class="title">'+days[selected_year][selected_month][selected_day.day].event_title+'</div><div class="date" >'+selected_day.day+' '+month_name(2,selected_month)+' '+selected_year+'</div><div class="section">Участники:</div><div class="participants">'+days[selected_year][selected_month][selected_day.day].participants+'</div><div class="section">Описание:</div><div class="description">'+days[selected_year][selected_month][selected_day.day].descript+'</div><button id="delete">Удалить</button></div>');
+
+
+var popup_html='<div class="popup_editDay" id="popup_editDay"><div class="daw"></div><div class="cross"></div><div class="title">'+days[selected_year][selected_month][selected_day.day].event_title+'</div><div class="date" >'+selected_day.day+' '+month_name(2,selected_month)+' '+selected_year+'</div>';
+if(days[selected_year][selected_month][selected_day.day].participants!=''){popup_html+='<div class="section">Участники:</div><div class="participants">'+days[selected_year][selected_month][selected_day.day].participants+'</div>'};
+if(days[selected_year][selected_month][selected_day.day].descript!=''){popup_html+='<div class="section">Описание:</div><div class="description">'+days[selected_year][selected_month][selected_day.day].descript+'</div>'};
+
+popup_html+='<button id="delete">Удалить</button></div>';
+td_element.parent().parent().prepend(popup_html);
+
 
 $('#popup_editDay .cross').click(function(){$('#popup_editDay').remove();});
 $('#popup_editDay #delete').click(function(){delete_event(selected_year,selected_month,selected_day.day); go_date(selected_year,selected_month,selected_day.day);});
@@ -226,11 +286,13 @@ $('#popup_editDay #delete').click(function(){delete_event(selected_year,selected
 function draw_popup_editDay(td_element){
 
 
+close_all_popups();
+
 $('#popup_editDay').remove();
 pave_path(selected_year,selected_month,selected_day.day);
 
 
-var popup_html='<div class="popup_editDay" id="popup_editDay"><div class="daw"></div><div class="cross"></div><input type="text" value="'+days[selected_year][selected_month][selected_day.day].event_title+'" id="title" placeholder="Событие"><input type="text" value="'+selected_day.day+' '+month_name(2,selected_month)+' '+selected_year+'" placeholder="День, месяц, год"><input type="text" value="'+days[selected_year][selected_month][selected_day.day].participants+'" id="participants" placeholder="Имена участников"><textarea placeholder="Описание" id="descript">'+days[selected_year][selected_month][selected_day.day].descript+'</textarea><button id="done">Готово</button>';
+var popup_html='<div class="popup_editDay" id="popup_editDay"><div class="daw"></div><div class="cross"></div><input type="text" value="'+days[selected_year][selected_month][selected_day.day].event_title+'" id="title" placeholder="Событие"><input type="text" value="'+selected_day.day+' '+month_name(2,selected_month)+' '+selected_year+'" placeholder="День месяц год" id="date"><input type="text" value="'+days[selected_year][selected_month][selected_day.day].participants+'" id="participants" placeholder="Имена участников"><textarea placeholder="Описание" id="descript">'+days[selected_year][selected_month][selected_day.day].descript+'</textarea><div class="error" id="error"></div><button id="done">Готово</button>';
 if(days[selected_year][selected_month][selected_day.day].exist==1){popup_html+= '<button id="delete">Удалить</button>';}
 popup_html+='</div>';
 td_element.parent().parent().prepend(popup_html);
@@ -267,22 +329,59 @@ function update_event(year,month,date){
 	var title=$('#popup_editDay #title').val();
 	var participants=$('#popup_editDay #participants').val();
 	var descript=$('#popup_editDay #descript').val();
+	var date=validate_dateString($('#popup_editDay #date').val());
 
 	
 
-	pave_path(year,month,date);
+		if(title==""){$('#popup_editDay #error').html("Некорректное название");}
+		else{
+			if (date.valid!=1){$('#popup_editDay #error').html("Некорректная дата");$('#popup_editDay #date').val(selected_day.day+' '+month_name(2,selected_month)+' '+selected_year);}
+			else{
+			pave_path(date.year,date.month,date.date);
 
-	days[year][month][date].exist=1;
-	if(title!==undefined){days[year][month][date].event_title=title;}
-	if(participants!==undefined){days[year][month][date].participants=participants;}
-	if(descript!==undefined){days[year][month][date].descript=descript;}
-	
-	go_date(year,month,date)
-	
+			days[date.year][date.month][date.date].exist=1;
+			if(title!==undefined){days[date.year][date.month][date.date].event_title=title;}
+			if(participants!==undefined){days[date.year][date.month][date.date].participants=participants;}
+			if(descript!==undefined){days[date.year][date.month][date.date].descript=descript;}
+			
+			go_date(date.year,date.month,date.date)
+		}
+		}
+	}
+function validate_dateString(dateString){
+var dateArr=dateString.split(" ");
+var result=Object();
+result.valid=0;
+if(dateArr.length==3){
+	var date=parseInt(dateArr[0]);
+	var month=dateArr[1];
+	var year=parseInt(dateArr[2]);
+
+	if(year>0&&year<10000){
+		
+
+		if(month_name(3,month)!="нет"&&date>0){
+			var test_date=new Date(year,month_name(3,month),1).getDaysInMonth();
+			
+			if(date<= test_date){
+			result.date=date;
+			result.month=month_name(3,month);
+			result.year=year;
+			result.valid=1;
+			}
+		}
+
 
 	}
 
+}
+
+return result;
+}
+
+
 function light_day(element){
+	close_all_popups();
 	$('#calendar .inner').removeClass('active');
 	element.addClass('active');
 	
@@ -370,6 +469,7 @@ for(date=1;date<=select_month.getDaysInMonth();date++){
  calendar[i].date_class=" curent";
  calendar[i].today=0;
  calendar[i].has_event=0;
+  calendar[i].td_class="";
  if(date==today.getDate()&&month==today.getMonth()+1&&year==today.getFullYear()){ calendar[i].td_class+=" today";}
 
  if ( does_event_exist(year,month,date)==1){
