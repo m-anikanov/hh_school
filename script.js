@@ -15,7 +15,6 @@ $(document).ready(function(){
 
 
 
-alert("qwe");
 //Добавляем всплывающие окно "Добавить"
 
 	$('#wrap_buttonAdd').append('<div class="popup_createNew" id="popup_createNew" ><div class="daw"></div><div class="cross"></div><input type="text" id="createString" placeholder="5 марта, 14:00, День рождение"><div class="error" id="error"></div><button>Создать</button></div>');
