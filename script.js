@@ -71,6 +71,11 @@ function popup_controller(popup_object,button_object){
 
 }
 
+function json_string()
+{
+	var string = JSON.stringify(days);
+	return string;
+}
 
 
 
@@ -92,7 +97,7 @@ function do_addEvent_string(){
 	
 	if(date.valid==1){
 		go_date(date.year,date.month,date.date);
-		if(days[date.year][date.month][date.date].exist==1){
+		if(exist_event(date.year,date.month,date.date)==1){
 			$('#add_button').click();
 			$('#popup_createNew #error').html("¬ этот день уже запланировано событие");
 		}
@@ -348,6 +353,21 @@ if(!(typeof days[year][month][date]== "object"&&days[year][month][date]!==null))
 	days[year][month][date].descript="";
 }
 
+}
+
+function exist_event(year,month,date){
+var result=0;
+
+	if(days[year]!=undefined){
+	if(days[year][month]!=undefined){
+	if(typeof days[year][month][date]== "object"&&days[year][month][date]!==null){
+		result=days[year][month][date].exist;
+
+			}
+	
+		}
+	}
+	return result;
 }
 
 
