@@ -162,7 +162,6 @@ background-color: #c2e4fe;
 
 .popup_createNew{
 position: absolute;
-height: 54px;
 width: 261px;
 background-color: white;
 z-index: 20;
@@ -206,7 +205,7 @@ display: none;
 	padding:0 7px;
 	box-shadow:inset 0 1px 5px rgba(0,0,0,0.3);
 	font-size:12px;
-	margin-bottom:11px;
+	margin-bottom:13px;
 }
 
 
@@ -268,6 +267,14 @@ td.today .date_label{
 }
 
 .popup_editDay .error{
+	color: rgb(216, 12, 12);
+	font-size: 14px;
+	margin-bottom: 15px;
+	margin-right: 3px;
+	line-height: 20px;
+}
+
+.popup_createNew .error{
 	color: rgb(216, 12, 12);
 	font-size: 14px;
 	margin-bottom: 15px;

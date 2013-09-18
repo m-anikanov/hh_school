@@ -21,7 +21,7 @@ $(document).ready(function(){
 
 //Добавляем всплывающие окно "Добавить"
 
-	$('#wrap_buttonAdd').append('<div class="popup_createNew" id="popup_createNew" ><div class="daw"></div><div class="cross"></div><input type="text" placeholder="5 марта, 14:00, День рождение"><button>Создать</button></div>');
+	$('#wrap_buttonAdd').append('<div class="popup_createNew" id="popup_createNew" ><div class="daw"></div><div class="cross"></div><input type="text" id="createString" placeholder="5 марта, 14:00, День рождение"><div class="error" id="error"></div><button>Создать</button></div>');
 
 
 //Вызов этого окна
@@ -79,9 +79,36 @@ function popup_createNew_init()
 
 
 	$('#popup_editDay').remove();
-	$('#popup_createNew input').attr('placeholder', selected_day.day+' '+month_name(2,selected_month)+', 14:00, День рождение');
+	$('#popup_createNew input').attr('placeholder', selected_day.day+' '+month_name(2,selected_month)+' '+selected_year+', Новое событие');
+	$('#popup_createNew button').click(function(){do_addEvent_string()});
 }
 
+function do_addEvent_string(){
+	var string= $('#popup_createNew #createString').val();
+	if(string==""){string=$('#popup_createNew input').attr('placeholder');}
+	var addEventArr = string.split(", ");
+
+	var date=validate_dateString(addEventArr[0]);
+	
+	if(date.valid==1){
+		go_date(date.year,date.month,date.date);
+		if(days[date.year][date.month][date.date].exist==1){
+			$('#add_button').click();
+			$('#popup_createNew #error').html("В этот день уже запланировано событие");
+		}
+		else{
+			
+
+			draw_popup_editDay(selected_day.element);
+			if(addEventArr[1]!= undefined){
+				$('#popup_editDay #title').val(addEventArr[1]);
+			}
+		}
+	}
+	else{
+		$('#popup_createNew #error').html("Некорректная дата");
+	}
+}
 
 function month_name(mode,month){
 	var result;
