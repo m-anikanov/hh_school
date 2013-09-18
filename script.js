@@ -3,14 +3,11 @@
 	selected_day = new Object();
 	selected_year = today.getFullYear();
 	selected_month = today.getMonth()+1;
-	days[2013]=Array();
-	days[2013][09]=Array();
-	days[2013][09][17]=Object();
-	days[2013][09][17].exist=1;
-	days[2013][09][17].event_title="Напиться!";
-	days[2013][09][17].participants="Витя Костин, Петр Михайлов!";
-	days[2013][09][17].descript="23:00";
 
+	unpackFrom_lockalStorage()
+
+
+	
 
 
 
@@ -18,7 +15,7 @@ $(document).ready(function(){
 
 
 
-
+alert("qwe");
 //Добавляем всплывающие окно "Добавить"
 
 	$('#wrap_buttonAdd').append('<div class="popup_createNew" id="popup_createNew" ><div class="daw"></div><div class="cross"></div><input type="text" id="createString" placeholder="5 марта, 14:00, День рождение"><div class="error" id="error"></div><button>Создать</button></div>');
@@ -71,10 +68,78 @@ function popup_controller(popup_object,button_object){
 
 }
 
-function json_string()
+function packTo_lockalStorage()
 {
-	var string = JSON.stringify(days);
-	return string;
+	var lib="";
+	localStorage.clear();
+
+	jQuery.each(days,function(i,val){
+
+		if(val!=undefined){
+
+							jQuery.each(days[parseInt(i)],function(j,valj){
+
+							if(valj!=undefined){
+
+												jQuery.each(days[parseInt(i)][parseInt(j)],function(z,valz){
+
+											if(valz!=undefined){
+
+
+
+												if(valz.exist==1){
+														try {
+														    localStorage.setItem(i+'.'+j+'.'+z, JSON.stringify(valz));
+														} catch (e) {
+														    if (e == QUOTA_EXCEEDED_ERR) {
+														        $('.global_error').html("Закончилось место в localStorage");
+														        $('.global_error').css("display","block");
+														    }
+														}
+													lib+=i+'.'+j+'.'+z+';';
+
+													}
+
+											}
+
+
+											});
+
+							}
+
+
+							});
+
+		}
+
+
+	});
+
+	localStorage.setItem("lib", lib);
+	//var string = JSON.stringify(days);
+	//return string;
+}
+
+function unpackFrom_lockalStorage(){
+var obj;
+var dates;
+var lockalLibArr=localStorage.getItem("lib");
+
+if(lockalLibArr!=null){
+lockalLibArr=lockalLibArr.split(";");
+jQuery.each(lockalLibArr,function(j,valj){
+
+	obj=$.parseJSON(localStorage.getItem(valj));
+	dates=valj.split(".");
+
+	pave_path(dates[0],dates[1],dates[2]);
+	days[dates[0]][dates[1]][dates[2]]=obj;
+
+});
+
+
+return lockalLibArr;
+}
 }
 
 
@@ -392,7 +457,9 @@ function update_event(year,month,date){
 			if(descript!==undefined){days[date.year][date.month][date.date].descript=descript;}
 			
 			go_date(date.year,date.month,date.date)
-		}
+			packTo_lockalStorage();
+
+			}
 		}
 	}
 function validate_dateString(dateString){
@@ -408,7 +475,7 @@ if(dateArr.length==3){
 		
 
 		if(month_name(3,month)!="нет"&&date>0){
-			var test_date=new Date(year,month_name(3,month),1).getDaysInMonth();
+			var test_date=new Date(year,month_name(3,month)-1,1).getDaysInMonth();
 			
 			if(date<= test_date){
 			result.date=date;
@@ -650,6 +717,7 @@ function go_date(year,month,date){
 
 function delete_event(year,monse,day){
 	days[year][monse][day]=null;
+	packTo_lockalStorage();
 
 }
 
